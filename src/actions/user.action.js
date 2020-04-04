@@ -27,7 +27,6 @@ function registerAttempt() {
 }
 
 function registerSuccess(username) {
-    console.log(username)
     return {
         type: "REGISTER_SUCCESS",
         username
@@ -74,7 +73,10 @@ export function register(username, password) {
     return function (dispatch) {
         dispatch(registerAttempt());
         return Axios.post('/api/user/', {username, password})
-            .then(response => dispatch(registerSuccess(response.data.username)),
+            .then(response => {
+                console.dir(response.data);
+                dispatch(registerSuccess(response.data.username))
+                },
                 error => dispatch(registerFailure(error.response.data.message))
             );
     }

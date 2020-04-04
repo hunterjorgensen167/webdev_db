@@ -13,7 +13,6 @@ class Pokemons extends React.Component {
     componentDidMount() {
         const { match } = this.props;
         const { username } = match.params;
-        console.count(username);
         this.props.setUser(username);
         this.props.getPokemon(username);
     }

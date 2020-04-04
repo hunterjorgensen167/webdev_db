@@ -14,7 +14,6 @@ function pokemons(state = [], action) {
 }
 
 function loading(state = true, action) {
-    console.count(action.type);
     switch (action.type) {
         case 'RECEIVE_POKEMONS':
         case 'REQUEST_POKEMONS':
