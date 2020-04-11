@@ -20,22 +20,21 @@ function inFlight() {
 }
 
 
-export function fetchPokemon(username) {
+export function fetchPokemon() {
     return function(dispatch) {
         dispatch(loadingPokemons());
-        return Axios.get(`/api/pokemon?username=${username}`)
+        return Axios.get(`/api/pokemon`)
             .then(response => dispatch(receivePokemonList(response.data)),
                 error => console.log('An error occurred.', error)
             );
     }
 }
 
-export function addPokemon(pokemon, username) {
-    pokemon.owner = username;
+export function addPokemon(pokemon) {
     return function(dispatch) {
         dispatch(inFlight());
         return Axios.post(`/api/pokemon`, pokemon)
-            .then(() => Axios.get(`/api/pokemon?username=${username}`),
+            .then(() => Axios.get(`/api/pokemon`),
                 error => console.log('An error occurred.', error))
             .then(
                 response => dispatch(receivePokemonList(response.data)),
@@ -44,11 +43,11 @@ export function addPokemon(pokemon, username) {
     }
 }
 
-export function deletePokemon(pokemonId, username) {
+export function deletePokemon(pokemonId) {
     return function(dispatch) {
         dispatch(inFlight());
         return Axios.delete(`/api/pokemon/` + pokemonId)
-            .then(() => Axios.get(`/api/pokemon?username=${username}`),
+            .then(() => Axios.get(`/api/pokemon`),
                 error => console.log('An error occurred.', error))
             .then(
                 response => dispatch(receivePokemonList(response.data)),

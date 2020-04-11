@@ -45,14 +45,12 @@ function username(state = null, action) {
 function inFlight(state = false, action) {
     return action.type === 'LOGIN_ATTEMPT';
 }
-
 function redirect(state = '', action) {
     if (action.type === 'LOGIN_SUCCESS' || action.type === 'REGISTER_SUCCESS') {
-        return '/user/' + action.username + '/pokemon/';
+        return '/pokemon/';
     }
     return '';
 }
-
 export default combineReducers({
     error,
     inFlight,

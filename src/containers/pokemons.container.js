@@ -1,8 +1,8 @@
+// remove all references to username
 import React from "react";
 import {connect} from 'react-redux';
 import {addPokemon, deletePokemon, fetchPokemon} from '../actions/pokemon.action'
 import {withRouter} from "react-router";
-import {selectUser} from "../actions/user.action";
 
 class Pokemons extends React.Component {
     constructor() {
@@ -11,10 +11,7 @@ class Pokemons extends React.Component {
     }
 
     componentDidMount() {
-        const { match } = this.props;
-        const { username } = match.params;
-        this.props.setUser(username);
-        this.props.getPokemon(username);
+        this.props.getPokemon();
     }
 
     render() {
@@ -29,11 +26,11 @@ class Pokemons extends React.Component {
     }
 
     _deletePokemon(id) {
-        this.props.deletePokemon(id, this.props.username);
+        this.props.deletePokemon(id);
     }
 
     _addPokemon() {
-        this.props.addPokemon(this.state, this.props.username);
+        this.props.addPokemon(this.state);
     }
 
     _handleFormUpdate(event, value) {
@@ -75,17 +72,16 @@ class Pokemons extends React.Component {
 
 function mapDispatchToProps(dispatch, props) {
     return {
-        getPokemon: (username) => dispatch(fetchPokemon(username)),
-        addPokemon: (pokemon, username) => dispatch(addPokemon(pokemon, username)),
-        deletePokemon: (id, username) => dispatch(deletePokemon(id, username)),
-        setUser: (username) => dispatch(selectUser(username)),
+        getPokemon: () => dispatch(fetchPokemon()),
+        addPokemon: (pokemon) => dispatch(addPokemon(pokemon)),
+        deletePokemon: (id) => dispatch(deletePokemon(id)),
     }
 }
 
 
 function mapStateToProps(state, props) {
     return { ...state.pokemon,
-    username: state.user.username}
+        username: state.user.username}
 };
 
 

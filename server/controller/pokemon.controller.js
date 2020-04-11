@@ -3,22 +3,17 @@ const router = express.Router();
 
 const PokemonAccessor = require('../model/pokemon.model');
 
-router.get('/', (req, res) => {
-    if (req.query.username) {
-        PokemonAccessor.findPokemonByOwner(req.query.username)
-            .then((response) => res.status(200).send(response),
-                (error) =>  res.status(404).send(`Error finding Pokemon:${error}`));
-    } else {
-        return PokemonAccessor.getAllPokemon()
-            .then((response) => res.status(200).send(response),
-                (error) =>  res.status(404).send(`Error finding Pokemon:${error}`));
-    }
+const authParser = require('../middleware/middleware_auth.middleware');
+
+
+router.get('/', authParser, function(req, res) {
+    PokemonAccessor.findPokemonByOwner(req.username)
+        .then((response) => res.status(200).send(response),
+            (error) =>  res.status(404).send(`Error finding Pokemon:${error}`));
 });
 
-router.post('/', (req, res) => {
-    // NOTE: because we're using Mongoose, it will
-    // filter out any data that we DON'T want
-    // So we can safely pass it the entire body
+router.post('/', authParser, (req, res) => {
+    req.body.owner = req.username;
     return PokemonAccessor.insertPokemon(req.body)
         .then((response) => res.status(200).send(response),
             (error) => res.status(404).send(`Error finding Pokemon:${error}`))
